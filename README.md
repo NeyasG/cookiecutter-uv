@@ -14,3 +14,5 @@ A lightweight template for python based projects using uv as a package manager.
 - Pre-commit hooks with [pre-commit](https://pre-commit.com/)
 
 ## Quickstart
+
+Random change
