@@ -1,12 +1,17 @@
 {
     "author": "Neyas Guruswamy",
     "email": "neyasg@gmail.com",
-    "project_name": "my_project",
+    "author_github_handle": "NeyasG",
+    "project_name": "my-project",
     "project_slug": "{{cookiecutter.project_name|lower|replace('-','_')}}",
     "project_description": "This is a template repository for Python projects using uv",
     "layout": [
         "flat",
         "src"
+    ],
+    "publish_to_pypi": [
+        "y",
+        "n"
     ],
     "zensical": [
         "y",
