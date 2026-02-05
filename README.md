@@ -12,3 +12,5 @@ A lightweight template for python based projects using uv as a package manager.
 - [zensical](https://github.com/zensical/zensical) for generating documentation
 - CI/CD with [GitHub Actions](https://github.com/features/actions)
 - Pre-commit hooks with [pre-commit](https://pre-commit.com/)
+
+## Quickstart
