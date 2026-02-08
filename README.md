@@ -10,9 +10,7 @@ A lightweight template for python based projects using uv as a package manager.
 - [commitizen](https://commitizen-tools.github.io/commitizen/) for release management and commit discipline
 - [pytest](https://docs.pytest.org/en/stable/) for testing
 - [zensical](https://github.com/zensical/zensical) for generating documentation
-- CI/CD with [GitHub Actions](https://github.com/features/actions)
+- CI/CD with [GitHub Actions](https://github.com/features/actions) WIP
 - Pre-commit hooks with [pre-commit](https://pre-commit.com/)
 
 ## Quickstart
-
-Random change

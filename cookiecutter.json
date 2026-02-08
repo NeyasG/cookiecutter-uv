@@ -6,8 +6,8 @@
     "project_slug": "{{cookiecutter.project_name|lower|replace('-','_')}}",
     "project_description": "This is a template repository for Python projects using uv",
     "layout": [
-        "flat",
-        "src"
+        "src",
+        "flat"
     ],
     "publish_to_pypi": [
         "y",
