@@ -11,6 +11,6 @@ A lightweight template for python based projects using uv as a package manager.
 - [pytest](https://docs.pytest.org/en/stable/) for testing
 - [zensical](https://github.com/zensical/zensical) for generating documentation
 - CI/CD with [GitHub Actions](https://github.com/features/actions) WIP
-- Pre-commit hooks with [pre-commit](https://pre-commit.com/)
+- Pre-commit hooks with [prek](https://prek.j178.dev/)
 
 ## Quickstart

@@ -22,10 +22,10 @@ bake-and-test-deploy: ## For quick publishing to cookiecutter-uv-example to test
 	@cd cookiecutter-uv-example; uv sync && \
 		git init -b main && \
 		git add . && \
-		uv run pre-commit install && \
-		uv run pre-commit run -a || true && \
+		uv run prek install && \
+		uv run prek run -a || true && \
 		git add . && \
-		uv run pre-commit run -a || true && \
+		uv run prek run -a || true && \
 		git add . && \
 		git commit -m "init commit" && \
 		git remote add origin git@github.com:NeyasG/cookiecutter-uv-example.git && \
@@ -36,14 +36,14 @@ bake-and-test-deploy: ## For quick publishing to cookiecutter-uv-example to test
 install: ## Install the virtual environment
 	@echo "🚀 Creating virtual environment"
 	@uv sync
-	@uv run pre-commit install
+	@uv run prek install
 
 .PHONY: check
 check: ## Run code quality tools.
 	@echo "🚀 Checking lock file consistency with 'pyproject.toml'"
 	@uv lock --locked
-	@echo "🚀 Linting code: Running pre-commit"
-	@uv run pre-commit run -a
+	@echo "🚀 Linting code: Running prek"
+	@uv run prek run -a
 	@echo "🚀 Static type checking: Running ty"
 	@uv run ty check
 
