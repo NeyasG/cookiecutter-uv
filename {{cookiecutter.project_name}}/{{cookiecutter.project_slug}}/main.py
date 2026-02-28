@@ -1,3 +1,5 @@
+"""Main module for {{cookiecutter.project_name}}."""
+
 def main(bar: str) -> str:
     """Summary line.
 
