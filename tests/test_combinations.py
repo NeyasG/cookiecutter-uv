@@ -16,7 +16,7 @@ DEFAULTS = {
     "open_source_license": "MIT license",
 }
 
-COOKIECUTTER_CONFIG = json.loads(Path("cookiecutter.json").read_text())
+COOKIECUTTER_CONFIG = json.loads((Path(__file__).parent.parent / "cookiecutter.json").read_text())
 DEFAULT_PROJECT_NAME = COOKIECUTTER_CONFIG["project_name"]
 DEFAULT_PROJECT_SLUG = DEFAULT_PROJECT_NAME.lower().replace("-", "_")
 
@@ -97,13 +97,13 @@ class TestCombinations:
 
         if effective["layout"] == "src":
             assert project.has_dir("src"), "Expected src/ directory for src layout"
-            assert project.has_dir(f"src/{DEFAULT_PROJECT_SLUG}"), "Expected src/DEFAULT_PROJECT_SLUG for src layout"
+            assert project.has_dir(f"src/{DEFAULT_PROJECT_SLUG}"), f"Expected src/{DEFAULT_PROJECT_SLUG} for src layout"
             assert not project.has_dir(DEFAULT_PROJECT_SLUG), (
-                "Expected no top-level DEFAULT_PROJECT_SLUG for src layout"
+                f"Expected no top-level {DEFAULT_PROJECT_SLUG} for src layout"
             )
         else:
             # flat layout
-            assert project.has_dir(DEFAULT_PROJECT_SLUG), "Expected DEFAULT_PROJECT_SLUG/ in root for flat layout"
+            assert project.has_dir(DEFAULT_PROJECT_SLUG), f"Expected {DEFAULT_PROJECT_SLUG}/ in root for flat layout"
             assert not project.has_dir("src"), "Expected no src/ for flat layout"
 
     def test_pyproject_metadata(self, bake, options):

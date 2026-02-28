@@ -72,7 +72,7 @@ class BakedProject:
     def run_tests(self) -> None:
         result = self.run("uv run make test")
         if result.returncode != 0:
-            raise RuntimeError(f"Command failed: uv sync \nstdout:\n{result.stdout}\nstderr:\n{result.stderr}")
+            raise RuntimeError(f"Command failed: uv run make test\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}")
 
     def run_check(self) -> None:
         if not (self.path / ".git").is_dir():
