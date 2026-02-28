@@ -24,7 +24,7 @@ def test_deptry_runs_in_generated_project(bake: BakeFixture) -> None:
     "project_name, generated_slug",
     [("my-project", "my_project"), ("MyProject", "myproject"), ("a-b-c-123", "a_b_c_123"), ("a-b", "a_b")],
 )
-def test_valid_project_names(bake: BakeFixture, project_name: str) -> None:
+def test_valid_project_names(bake: BakeFixture, project_name: str, generated_slug: str) -> None:
     result = bake(project_name=project_name)
 
     result.run_check()

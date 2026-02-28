@@ -15,6 +15,7 @@ DEFAULTS = {
     "deptry": "y",
     "zensical": "y",
     "open_source_license": "MIT license",
+    "include_github_actions": "y",
 }
 
 COOKIECUTTER_CONFIG = json.loads((Path(__file__).parent.parent / "cookiecutter.json").read_text())
@@ -36,6 +37,8 @@ COMBINATIONS = [
     ),
     pytest.param({"deptry": "n"}, id="no-deptry"),
     pytest.param({"layout": "flat", "deptry": "n"}, id="flat-no-deptry"),
+    pytest.param({"include_github_actions": "n"}, id="no-github-actions"),
+    pytest.param({"include_github_actions": "y"}, id="with-github-actions"),
 ]
 
 
@@ -136,3 +139,19 @@ class TestCombinations:
             assert "deptry" not in pyproject_content, "Expected no deptry in pyproject.toml when deptry='n'"
             assert "deptry" not in prek_content, "Expected no deptry hook in prek.toml when deptry='n'"
             assert "deptry" not in makefile_content, "Expected no deptry in Makefile when deptry='n'"
+
+    def test_github_actions(self, bake: Callable[..., BakedProject], options: dict[str, str]):
+        """Verify .github/workflows/ci.yml is present/absent based on include_github_actions option."""
+        project = bake(**options)
+        effective = resolve_options(options)
+
+        if effective["include_github_actions"] == "y":
+            assert project.has_dir(".github"), "Expected .github/ when include_github_actions='y'"
+            assert project.has_file(".github/workflows/ci.yml"), (
+                "Expected .github/workflows/ci.yml when include_github_actions='y'"
+            )
+            assert project.is_valid_yaml(".github/workflows/ci.yml"), (
+                "Expected valid YAML in .github/workflows/ci.yml"
+            )
+        else:
+            assert not project.has_dir(".github"), "Expected no .github/ when include_github_actions='n'"
