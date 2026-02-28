@@ -34,6 +34,7 @@ dev = [
     "pytest-cookies>=0.7.0",
     "ty>=0.0.19",
     "ruff>=0.15.4",
+    "prek>=0.3.4",
 ]
 
 [tool.ruff]
