@@ -58,7 +58,7 @@ class TestCombinations:
         for rel_path in EXPECTED_FILES:
             assert (project.path / rel_path).exists(), f"Expected {rel_path} to exist"
 
-    def test_license_files(self, bake, options):
+    def test_license_files(self, bake: Callable[..., BakedProject], options: dict[str, str]):
         """Verify correct license file is selected."""
         project = bake(**options)
         effective = resolve_options(options)
@@ -78,7 +78,7 @@ class TestCombinations:
             # "Not open source" case
             assert not project.has_file("LICENSE"), "Expected no LICENSE file for non-open source"
 
-    def test_documentation_layout(self, bake, options):
+    def test_documentation_layout(self, bake: Callable[..., BakedProject], options: dict[str, str]):
         """Verify docs directory is present/absent based on zensical option."""
         project = bake(**options)
         effective = resolve_options(options)
@@ -90,7 +90,7 @@ class TestCombinations:
             assert not project.has_dir("docs"), "Expected no docs/ when zensical='n'"
             assert not project.has_file("zensical.toml"), "Expected no zensical.toml when zensical='n'"
 
-    def test_source_layout(self, bake, options):
+    def test_source_layout(self, bake: Callable[..., BakedProject], options: dict[str, str]):
         """Verify correct directory layout based on layout option."""
         project = bake(**options)
         effective = resolve_options(options)
@@ -106,7 +106,7 @@ class TestCombinations:
             assert project.has_dir(DEFAULT_PROJECT_SLUG), f"Expected {DEFAULT_PROJECT_SLUG}/ in root for flat layout"
             assert not project.has_dir("src"), "Expected no src/ for flat layout"
 
-    def test_pyproject_metadata(self, bake, options):
+    def test_pyproject_metadata(self, bake: Callable[..., BakedProject], options: dict[str, str]):
         """Verify pyproject.toml contains correct metadata."""
         project = bake(**options)
         content = project.read_file("pyproject.toml")
