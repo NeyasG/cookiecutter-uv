@@ -20,6 +20,12 @@ hooks = [
     { id = "ruff-format" },
 ]
 
+[[repos]]
+repo = "local"
+hooks = [
+    { id = "ty", name = "ty", entry = "ty check", language = "system", pass_filenames = false },
+]
+
 {% if cookiecutter.deptry == 'y' %}[[repos]]
 repo = "https://github.com/fpgmaas/deptry/"
 rev = "0.24.0"

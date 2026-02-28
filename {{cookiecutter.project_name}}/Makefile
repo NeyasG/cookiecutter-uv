@@ -10,8 +10,6 @@ check: ## Run code quality tools.
 	@uv lock --locked
 	@echo "🚀 Linting code: Running prek"
 	@uv run prek run -a
-	@echo "🚀 Static type checking: Running type-checker"
-	@uv run ty check
 {%- if cookiecutter.deptry == "y" %}
 	@echo "🚀 Checking for obsolete dependencies: Running deptry"
 	@uv run deptry .
