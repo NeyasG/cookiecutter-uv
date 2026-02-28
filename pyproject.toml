@@ -32,8 +32,19 @@ dev = [
     "zensical>=0.0.21",
     "mkdocstrings-python>=2.0.0",
     "pytest-cookies>=0.7.0",
+    "ty>=0.0.19",
+    "ruff>=0.15.4",
 ]
 
 [tool.ruff]
 line-length = 120
 fix = true
+extend-exclude = ["*cookiecutter.project_name*"]
+
+[tool.ty.environment]
+python = ".venv"
+root = ["."]
+extra-paths = ["tests"]
+
+[tool.ty.src]
+include = ["tests", "hooks", "cookiecutter-uv"]
