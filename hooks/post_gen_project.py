@@ -32,6 +32,8 @@ if __name__ == "__main__":
     if "{{cookiecutter.zensical}}" != "y":
         remove_dir("docs")
         remove_file("zensical.toml")
+        if "{{cookiecutter.include_github_actions}}" == "y":
+            remove_file(os.path.join(".github", "workflows", "docs.yml"))
 
     if "{{cookiecutter.open_source_license}}" == "MIT license":
         move_file("LICENSE_MIT", "LICENSE")
