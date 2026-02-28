@@ -5,7 +5,7 @@ This is a modern Cookiecutter template that can be used to initiate a Python pro
 - [uv](https://docs.astral.sh/uv/) for dependency management
 - Supports both [src and flat layout](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/).
 - CI/CD with [GitHub Actions](https://github.com/features/actions) (Currently a WIP)
-- Pre-commit hooks with [pre-commit](https://pre-commit.com/)
+- Pre-commit hooks with [prek](https://prek.j178.dev/)
 - Code quality with [ruff](https://github.com/charliermarsh/ruff), [ty](https://docs.astral.sh/ty/).
 - Publishing to [PyPI](https://pypi.org) by creating a new release on GitHub (Currently a WIP)
 - Testing and coverage with [pytest](https://docs.pytest.org/en/7.1.x/).
