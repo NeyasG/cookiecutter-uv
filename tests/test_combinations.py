@@ -1,8 +1,12 @@
 """Test cookiecutter template across multiple option combinations."""
 
-from __future__ import annotations
+import json
+import tomllib
+from pathlib import Path
+from typing import Callable
 
 import pytest
+from conftest import BakedProject
 
 # Defaults from cookiecutter.json (first item in each list)
 DEFAULTS = {
@@ -11,6 +15,10 @@ DEFAULTS = {
     "zensical": "y",
     "open_source_license": "MIT license",
 }
+
+COOKIECUTTER_CONFIG = json.loads(Path("cookiecutter.json").read_text())
+DEFAULT_PROJECT_NAME = COOKIECUTTER_CONFIG["project_name"]
+DEFAULT_PROJECT_SLUG = DEFAULT_PROJECT_NAME.lower().replace("-", "_")
 
 # Define meaningful option combinations to test
 COMBINATIONS = [
@@ -37,7 +45,7 @@ def resolve_options(options: dict[str, str]) -> dict[str, str]:
 class TestCombinations:
     """Validate file presence/absence for each option combination."""
 
-    def test_always_present_files(self, bake, options):
+    def test_always_present_files(self, bake: Callable[..., BakedProject], options: dict[str, str]) -> None:
         """Core files should always be present regardless of options."""
         EXPECTED_FILES = [
             "pyproject.toml",
@@ -89,18 +97,21 @@ class TestCombinations:
 
         if effective["layout"] == "src":
             assert project.has_dir("src"), "Expected src/ directory for src layout"
-            assert project.has_dir("src/my_project"), "Expected src/my_project for src layout"
-            assert not project.has_dir("my_project"), "Expected no top-level my_project for src layout"
+            assert project.has_dir(f"src/{DEFAULT_PROJECT_SLUG}"), "Expected src/DEFAULT_PROJECT_SLUG for src layout"
+            assert not project.has_dir(DEFAULT_PROJECT_SLUG), (
+                "Expected no top-level DEFAULT_PROJECT_SLUG for src layout"
+            )
         else:
             # flat layout
-            assert project.has_dir("my_project"), "Expected my_project/ in root for flat layout"
+            assert project.has_dir(DEFAULT_PROJECT_SLUG), "Expected DEFAULT_PROJECT_SLUG/ in root for flat layout"
             assert not project.has_dir("src"), "Expected no src/ for flat layout"
 
     def test_pyproject_metadata(self, bake, options):
         """Verify pyproject.toml contains correct metadata."""
         project = bake(**options)
         content = project.read_file("pyproject.toml")
+        pyproject = tomllib.loads(content)
 
-        # These should always be present
-        assert "name = " in content, "Expected name field in pyproject.toml"
-        assert "my-project" in content or "my_project" in content, "Expected project reference"
+        assert "project" in pyproject, "Missing [project] section"
+        assert pyproject["project"]["name"] == "my-project", f"Unexpected name: {pyproject['project']['name']}"
+        assert "version" in pyproject["project"], "Missing version field"

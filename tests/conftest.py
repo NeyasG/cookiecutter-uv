@@ -49,7 +49,7 @@ class BakedProject:
         # Strip VIRTUAL_ENV so the outer test environment doesn't leak
         # into the baked project's subprocess.
         env = {k: v for k, v in os.environ.items() if k != "VIRTUAL_ENV"}
-        return subprocess.run(
+        result = subprocess.run(
             shlex.split(command),
             cwd=self.path,
             capture_output=True,
@@ -57,6 +57,7 @@ class BakedProject:
             check=check,
             env=env,
         )
+        return result
 
     def git_init(self) -> None:
         """Initialize a git repo and stage all files (needed for pre-commit)."""
@@ -70,7 +71,8 @@ class BakedProject:
 
     def run_tests(self) -> None:
         result = self.run("uv run make test")
-        assert result.returncode == 0, f"make test failed:\n{result.stderr}"
+        if result.returncode != 0:
+            raise RuntimeError(f"Command failed: uv sync \nstdout:\n{result.stdout}\nstderr:\n{result.stderr}")
 
     def run_check(self) -> None:
         if not (self.path / ".git").is_dir():
@@ -102,8 +104,12 @@ def bake(cookies) -> Callable[..., BakedProject]:
             exception=result.exception,
             options=options,
         )
+        # Fail immediately on generation errors to avoid downstream confusion
         if project.exception is not None and project.exit_code != 0:
             raise project.exception
+        # Validate path exists before returning
+        if project.path is None or not project.path.exists():
+            raise ValueError(f"Baked project path is invalid: {project.path}")
         return project
 
     return _bake

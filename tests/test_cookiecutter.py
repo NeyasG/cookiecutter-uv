@@ -19,7 +19,7 @@ def test_bake_project(bake: BakeFixture) -> None:
 def test_valid_project_names(bake: BakeFixture, project_name, generated_slug) -> None:
     result = bake(project_name=project_name)
 
-    result.path.name == generated_slug
+    result.run_check()
 
 
 @pytest.mark.parametrize("project_name", ["my_project", "123-invalid", "@bad"])
