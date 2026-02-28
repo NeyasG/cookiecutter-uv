@@ -33,6 +33,7 @@ dev = [
     "ruff>=0.14.14",
     {% if cookiecutter.zensical== 'y' %}"zensical>=0.0.15",
     "mkdocstrings-python>=2.0.0",{% endif %}
+    {% if cookiecutter.deptry == 'y' %}"deptry>=0.24.0",{% endif %}
 ]
 
 [build-system]

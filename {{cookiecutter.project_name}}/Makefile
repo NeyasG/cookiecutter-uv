@@ -12,6 +12,10 @@ check: ## Run code quality tools.
 	@uv run prek run -a
 	@echo "🚀 Static type checking: Running type-checker"
 	@uv run ty check
+{%- if cookiecutter.deptry == "y" %}
+	@echo "🚀 Checking for obsolete dependencies: Running deptry"
+	@uv run deptry .
+{%- endif %}
 
 .PHONY: test
 test: ## Test the code with pytest
