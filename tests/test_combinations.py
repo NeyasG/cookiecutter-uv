@@ -205,3 +205,36 @@ class TestCombinations:
             assert not project.file_contains("README.md", "PYPI_TOKEN"), (
                 "Expected no PYPI_TOKEN in README when publish_to_pypi='n'"
             )
+
+    def test_commitizen_config(self, bake: Callable[..., BakedProject], options: dict[str, str]) -> None:
+        """Verify commitizen is configured correctly."""
+        project = bake(**options)
+
+        content = project.read_file("pyproject.toml")
+        assert "[tool.commitizen]" in content, "Expected [tool.commitizen] section in pyproject.toml"
+        assert 'version_provider = "uv"' in content, "Expected version_provider = 'uv' in [tool.commitizen]"
+        assert "commitizen>=3.13.0" in content, "Expected commitizen>=3.13.0 in dev dependencies"
+
+        precommit = project.read_file("prek.toml")
+        assert "commitizen-tools/commitizen" in precommit, "Expected commitizen hook repo in prek.toml"
+
+        makefile = project.read_file("Makefile")
+        assert "cz commit" in makefile, "Expected 'cz commit' in Makefile"
+        assert "cz bump" in makefile, "Expected 'cz bump' in Makefile"
+
+    def test_pr_title_workflow(self, bake: Callable[..., BakedProject], options: dict[str, str]) -> None:
+        """Verify pr-title.yml is present/absent based on include_github_actions option."""
+        project = bake(**options)
+        effective = resolve_options(options)
+
+        if effective["include_github_actions"] == "y":
+            assert project.has_file(".github/workflows/pr-title.yml"), (
+                "Expected .github/workflows/pr-title.yml when include_github_actions='y'"
+            )
+            assert project.is_valid_yaml(".github/workflows/pr-title.yml"), (
+                "Expected valid YAML in .github/workflows/pr-title.yml"
+            )
+        else:
+            assert not project.has_file(".github/workflows/pr-title.yml"), (
+                "Expected no .github/workflows/pr-title.yml when include_github_actions='n'"
+            )

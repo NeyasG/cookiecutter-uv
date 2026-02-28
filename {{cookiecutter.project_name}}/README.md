@@ -57,6 +57,26 @@ You are now ready to start development on your project!
 
 ## Releasing a new version
 
+This project uses [Commitizen](https://commitizen-tools.github.io/) for versioning:
+
+```bash
+# Commit using conventional format
+make commit
+# OR use git commit manually: "feat: add new feature"
+
+# When ready to release
+make bump              # Bumps version, updates CHANGELOG.md, creates tag
+git push --follow-tags # Push changes and tags
+```
+
+### Conventional Commit Format
+
+- `feat:` — New features (minor version bump)
+- `fix:` — Bug fixes (patch version bump)
+- `docs:` — Documentation changes
+- `BREAKING CHANGE:` — Breaking changes (major version bump)
+- Other types: `build:`, `chore:`, `ci:`, `refactor:`, `style:`, `test:`
+
 {% if cookiecutter.publish_to_pypi == "y" -%}
 
 The project is set up to publish to [PyPI](https://pypi.org/) automatically when a new release is created on GitHub.
