@@ -150,9 +150,7 @@ class TestCombinations:
             assert project.has_file(".github/workflows/ci.yml"), (
                 "Expected .github/workflows/ci.yml when include_github_actions='y'"
             )
-            assert project.is_valid_yaml(".github/workflows/ci.yml"), (
-                "Expected valid YAML in .github/workflows/ci.yml"
-            )
+            assert project.is_valid_yaml(".github/workflows/ci.yml"), "Expected valid YAML in .github/workflows/ci.yml"
             if effective["zensical"] == "y":
                 assert project.has_file(".github/workflows/docs.yml"), (
                     "Expected .github/workflows/docs.yml when include_github_actions='y' and zensical='y'"
