@@ -27,3 +27,4 @@ jobs:
             build
             ci
             chore
+            revert
