@@ -12,6 +12,7 @@ from conftest import BakedProject
 DEFAULTS = {
     "layout": "src",  # First item in layout list
     "publish_to_pypi": "y",
+    "deptry": "y",
     "zensical": "y",
     "open_source_license": "MIT license",
 }
@@ -33,6 +34,8 @@ COMBINATIONS = [
         {"layout": "flat", "publish_to_pypi": "n", "zensical": "n"},
         id="flat-no-publish-no-docs",
     ),
+    pytest.param({"deptry": "n"}, id="no-deptry"),
+    pytest.param({"layout": "flat", "deptry": "n"}, id="flat-no-deptry"),
 ]
 
 
@@ -115,3 +118,21 @@ class TestCombinations:
         assert "project" in pyproject, "Missing [project] section"
         assert pyproject["project"]["name"] == "my-project", f"Unexpected name: {pyproject['project']['name']}"
         assert "version" in pyproject["project"], "Missing version field"
+
+    def test_deptry_configuration(self, bake: Callable[..., BakedProject], options: dict[str, str]):
+        """Verify deptry is configured when deptry='y' and absent when 'n'."""
+        project = bake(**options)
+        effective = resolve_options(options)
+
+        pyproject_content = project.read_file("pyproject.toml")
+        prek_content = project.read_file("prek.toml")
+        makefile_content = project.read_file("Makefile")
+
+        if effective["deptry"] == "y":
+            assert "deptry" in pyproject_content, "Expected deptry in pyproject.toml dev deps when deptry='y'"
+            assert "deptry" in prek_content, "Expected deptry hook in prek.toml when deptry='y'"
+            assert "deptry" in makefile_content, "Expected deptry in Makefile when deptry='y'"
+        else:
+            assert "deptry" not in pyproject_content, "Expected no deptry in pyproject.toml when deptry='n'"
+            assert "deptry" not in prek_content, "Expected no deptry hook in prek.toml when deptry='n'"
+            assert "deptry" not in makefile_content, "Expected no deptry in Makefile when deptry='n'"
