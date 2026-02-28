@@ -1,6 +1,7 @@
 import os
 import shlex
 import subprocess
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -84,7 +85,7 @@ class BakedProject:
 
 
 @pytest.fixture
-def bake(cookies):
+def bake(cookies) -> Callable[..., BakedProject]:
     """Fixture factory that bakes a cookiecutter project and returns a BakedProject.
 
     Usage:
@@ -101,8 +102,8 @@ def bake(cookies):
             exception=result.exception,
             options=options,
         )
-        assert project.exit_code == 0, f"Bake failed with options {options}: {project.exception}"
-        assert project.exception is None
+        if project.exception is not None and project.exit_code != 0:
+            raise project.exception
         return project
 
     return _bake
