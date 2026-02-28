@@ -27,6 +27,7 @@ Documentation = "https://{{cookiecutter.author_github_handle}}.github.io/{{cooki
 
 [dependency-groups]
 dev = [
+    "commitizen>=3.13.0",
     "pytest>=9.0.2",
     "prek>=0.3.3",
     "ty>=0.0.14",
@@ -110,3 +111,10 @@ convention = "google"
 "tests/*" = ["S101"]
 
 [tool.ruff.format]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version_provider = "uv"
+update_changelog_on_bump = true
+tag_format = "v$version"
+version_scheme = "semver"

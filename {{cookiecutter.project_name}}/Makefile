@@ -30,6 +30,15 @@ clean-build: ## Clean build artifacts
 	@echo "🚀 Removing build artifacts"
 	@uv run python -c "import shutil; import os; shutil.rmtree('dist') if os.path.exists('dist') else None"
 
+.PHONY: commit
+commit: ## Commit with commitizen
+	@uv run cz commit
+
+.PHONY: bump
+bump: ## Bump version and update changelog
+	@uv run cz bump --changelog
+	@echo "✅ Version bumped. Review CHANGELOG.md, then run: git push --follow-tags"
+
 
 {%- if cookiecutter.zensical == "y" %}
 

@@ -57,6 +57,38 @@ You are now ready to start development on your project!
 
 ## Releasing a new version
 
+This project uses [Commitizen](https://commitizen-tools.github.io/) for versioning:
+
+```bash
+# Commit using conventional format
+make commit
+# OR use git commit manually: "feat: add new feature"
+# OR use the VSCode Conventional Commits extension (search "Conventional Commits" in the Extensions panel)
+
+# When ready to release
+make bump              # Bumps version, updates CHANGELOG.md, creates tag
+git push --follow-tags # Push changes and tags
+```
+
+### Conventional Commit Format
+
+- `feat:` — New features (minor version bump)
+- `fix:` — Bug fixes (patch version bump)
+- `docs:` — Documentation changes
+- `BREAKING CHANGE:` — Breaking changes (major version bump)
+- Other types: `build:`, `chore:`, `ci:`, `refactor:`, `revert:`, `style:`, `test:`
+
+### Recommended PR Strategy
+
+For the cleanest commit history and changelog generation, configure your GitHub repository to use **squash merging**:
+
+1. Go to **Settings → General → Pull Requests**
+2. Enable **Allow squash merging**
+3. Set **Default commit message** to **Pull request title**
+4. Optionally disable merge commits and rebase merging to enforce squash-only merges
+
+With this setup, PR titles (which must follow the conventional commit format and are linted by the `pr-title` workflow) become the squash commit messages that Commitizen parses to generate the changelog.
+
 {% if cookiecutter.publish_to_pypi == "y" -%}
 
 The project is set up to publish to [PyPI](https://pypi.org/) automatically when a new release is created on GitHub.

@@ -70,6 +70,15 @@ publish: ## Publish a release to PyPI.
 .PHONY: build-and-publish
 build-and-publish: build publish ## Build and publish.
 
+.PHONY: commit
+commit: ## Commit with commitizen
+	@uv run cz commit
+
+.PHONY: bump
+bump: ## Bump version and update changelog
+	@uv run cz bump --changelog
+	@echo "✅ Version bumped. Review CHANGELOG.md, then run: git push --follow-tags"
+
 .PHONY: docs-test
 docs-test: ## Test if documentation can be built without warnings or errors
 	@uv run zensical build -s
