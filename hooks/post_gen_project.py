@@ -29,6 +29,10 @@ if __name__ == "__main__":
     if "{{cookiecutter.include_github_actions}}" != "y":
         remove_dir(".github")
 
+    if "{{cookiecutter.publish_to_pypi}}" != "y":
+        if "{{cookiecutter.include_github_actions}}" == "y":
+            remove_file(os.path.join(".github", "workflows", "publish.yml"))
+
     if "{{cookiecutter.zensical}}" != "y":
         remove_dir("docs")
         remove_file("zensical.toml")

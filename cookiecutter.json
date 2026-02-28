@@ -10,8 +10,8 @@
     "flat"
   ],
   "publish_to_pypi": [
-    "y",
-    "n"
+    "n",
+    "y"
   ],
   "deptry": [
     "y",

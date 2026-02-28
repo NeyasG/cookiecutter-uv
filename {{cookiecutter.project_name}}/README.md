@@ -59,10 +59,20 @@ You are now ready to start development on your project!
 
 {% if cookiecutter.publish_to_pypi == "y" -%}
 
-- Create an API Token on [PyPI](https://pypi.org/).
-- Add the API Token to your projects secrets with the name `PYPI_TOKEN` by visiting [this page](https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}/settings/secrets/actions/new).
-- Create a [new release](https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}/releases/new) on Github.
-- Create a new tag in the form `*.*.*`.
+The project is set up to publish to [PyPI](https://pypi.org/) automatically when a new release is created on GitHub.
 
-For more details, see [here](https://fpgmaas.github.io/cookiecutter-uv/features/cicd/#how-to-trigger-a-release).
+**Setup (one-time)**
+
+1. Create an account on [PyPI](https://pypi.org/) and generate an API token under *Account settings → API tokens*.
+2. Add the token to your repository secrets as `PYPI_TOKEN`: go to
+   `https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}/settings/secrets/actions/new`
+   and create a secret named `PYPI_TOKEN` with your token as the value.
+
+**Publishing a new version**
+
+1. Bump the version in `pyproject.toml` to match the release tag (e.g. `version = "0.2.0"`).
+2. Commit the change and push to `main`.
+3. Create a [new release](https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}/releases/new) on GitHub with a tag in the form `*.*.*` (e.g. `0.2.0`).
+
+GitHub Actions will automatically build the package with `uv build` and publish it to PyPI using the `PYPI_TOKEN` secret.
 {%- endif %}

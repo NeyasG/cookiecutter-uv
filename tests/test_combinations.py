@@ -11,7 +11,7 @@ from conftest import BakedProject
 # Defaults from cookiecutter.json (first item in each list)
 DEFAULTS = {
     "layout": "src",  # First item in layout list
-    "publish_to_pypi": "y",
+    "publish_to_pypi": "n",
     "deptry": "y",
     "zensical": "y",
     "open_source_license": "MIT license",
@@ -28,6 +28,7 @@ COMBINATIONS = [
     pytest.param({"layout": "flat"}, id="flat-layout"),
     pytest.param({"layout": "flat", "zensical": "n"}, id="flat-no-docs"),
     pytest.param({"zensical": "n"}, id="no-docs"),
+    pytest.param({"publish_to_pypi": "y"}, id="with-publish"),
     pytest.param({"publish_to_pypi": "n"}, id="no-publish"),
     pytest.param({"open_source_license": "Not open source"}, id="proprietary"),
     pytest.param({"open_source_license": "Apache Software License 2.0"}, id="apache-license"),
@@ -164,3 +165,43 @@ class TestCombinations:
                 )
         else:
             assert not project.has_dir(".github"), "Expected no .github/ when include_github_actions='n'"
+
+    def test_publish_workflow(self, bake: Callable[..., BakedProject], options: dict[str, str]):
+        """Verify publish.yml is present/absent based on publish_to_pypi and include_github_actions options."""
+        project = bake(**options)
+        effective = resolve_options(options)
+
+        if effective["include_github_actions"] == "y" and effective["publish_to_pypi"] == "y":
+            assert project.has_file(".github/workflows/publish.yml"), (
+                "Expected .github/workflows/publish.yml when publish_to_pypi='y' and include_github_actions='y'"
+            )
+            assert project.is_valid_yaml(".github/workflows/publish.yml"), (
+                "Expected valid YAML in .github/workflows/publish.yml"
+            )
+            assert project.file_contains(".github/workflows/publish.yml", "uv publish"), (
+                "Expected 'uv publish' in publish.yml"
+            )
+            assert project.file_contains(".github/workflows/publish.yml", "PYPI_TOKEN"), (
+                "Expected 'PYPI_TOKEN' secret reference in publish.yml"
+            )
+        else:
+            assert not project.has_file(".github/workflows/publish.yml"), (
+                "Expected no .github/workflows/publish.yml when publish_to_pypi='n' or include_github_actions='n'"
+            )
+
+    def test_readme_pypi_section(self, bake: Callable[..., BakedProject], options: dict[str, str]):
+        """Verify README contains PyPI section only when publish_to_pypi='y'."""
+        project = bake(**options)
+        effective = resolve_options(options)
+
+        if effective["publish_to_pypi"] == "y":
+            assert project.file_contains("README.md", "PYPI_TOKEN"), (
+                "Expected PYPI_TOKEN in README when publish_to_pypi='y'"
+            )
+            assert project.file_contains("README.md", "PyPI"), (
+                "Expected PyPI section in README when publish_to_pypi='y'"
+            )
+        else:
+            assert not project.file_contains("README.md", "PYPI_TOKEN"), (
+                "Expected no PYPI_TOKEN in README when publish_to_pypi='n'"
+            )
