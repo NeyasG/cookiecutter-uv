@@ -23,14 +23,14 @@ hooks = [
 [[repos]]
 repo = "local"
 hooks = [
-    { id = "ty", name = "ty", entry = "ty check", language = "system", pass_filenames = false },
+    { id = "ty", name = "ty", entry = "run ty check", language = "system", pass_filenames = false },
 ]
 
 {% if cookiecutter.deptry == 'y' %}[[repos]]
-repo = "https://github.com/fpgmaas/deptry/"
-rev = "0.24.0"
+[[repos]]
+repo = "local"
 hooks = [
-    { id = "deptry" },
+    { id = "deptry", name = "deptry", entry = "uv run deptry .", language = "system", pass_filenames = false },
 ]
 {% endif %}
 [[repos]]
